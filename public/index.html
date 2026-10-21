@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#ffffff"><link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes">
+<title>Newspaper</title>
+<script>(function(){function h(){return+new Intl.DateTimeFormat("en-GB",{timeZone:"Europe/Madrid",hour:"2-digit",hour12:false}).format(new Date())%24}
+function m(){try{return localStorage.getItem("th")||"auto"}catch(e){return"auto"}}
+window.applyTheme=function(){var a=m(),t=a==="auto"?(h()>=7&&h()<20?"light":"dark"):a;document.documentElement.dataset.theme=t;
+var e=document.querySelector("meta[name=theme-color]");if(e)e.content=t==="dark"?"#0E0E10":"#ffffff";
+var b=document.getElementById("th");if(b)b.textContent="Tema: "+({auto:"automático",light:"claro",dark:"oscuro"})[a]};
+window.applyTheme();setInterval(window.applyTheme,6e4)})()</script>
+<style>
+:root{color-scheme:light;--bg:#fff;--tx:#111;--mut:#555;--bd:#d9d9d9;--card:#f4f4f4;--ac:#B42318;--L:#3B4A8C;--C:#6B7280;--R:#B45309;--warn:#fef3c7;--warnx:#78350f}
+[data-theme=dark]{color-scheme:dark;--bg:#0E0E10;--tx:#F2F2F2;--mut:#A8A8B3;--bd:#2A2A31;--card:#18181C;--ac:#FB923C;--L:#818CF8;--C:#9CA3AF;--R:#F59E0B;--warn:#3b2f0b;--warnx:#fde68a}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+.wrap{max-width:680px;margin:0 auto;padding:10px 16px 48px}header{display:flex;justify-content:space-between;align-items:center;border-bottom:3px double var(--tx);padding-bottom:8px}
+.logo,h1,.hd{font-family:Georgia,"Times New Roman",serif}.logo{font-size:28px;font-weight:700;color:var(--tx);text-decoration:none;letter-spacing:-.5px}
+button,input,select{font:inherit;color:var(--tx)}.btn{min-height:44px;padding:0 14px;border-radius:999px;border:1px solid var(--tx);background:var(--bg);cursor:pointer}.btn.on{background:var(--tx);color:var(--bg)}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid var(--ac);outline-offset:2px}
+input[type=search]{width:100%;min-height:44px;border:1px solid var(--bd);border-radius:10px;padding:0 12px;background:var(--bg);margin:10px 0 6px}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding:4px 0 8px}.sub,.meta{font-size:13px;color:var(--mut)}.bar{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:4px 0}
+.sec{font:700 12px system-ui;letter-spacing:1.5px;text-transform:uppercase;border-bottom:1px solid var(--tx);padding:14px 0 4px;margin:0}
+.row{display:grid;grid-template-columns:46px 1fr 54px;gap:10px;padding:12px 0;border-bottom:1px solid var(--bd);color:var(--tx);text-decoration:none}
+.tm{font:13px ui-monospace,Menlo,monospace;color:var(--mut);padding-top:3px}.hd{font-size:18px;line-height:1.25;font-weight:700}.read .hd{font-weight:400;color:var(--mut)}
+.mb small{display:block;font-size:11px;color:var(--mut);text-align:right;margin-top:3px}.sb{display:flex;overflow:hidden;border-radius:3px;margin-top:8px}.sb i{display:block}.mb .sb{height:6px}
+.leg{display:flex;justify-content:space-between;font-size:13px;margin-top:5px}h1{font-size:30px;line-height:1.15;margin:6px 0 8px}h3{font-size:14px;margin:16px 0 2px}
+ul.s{list-style:none;margin:0;padding:0;font-size:14px}ul.s li{border-top:1px solid var(--bd);padding:8px 0}ul.s a{color:var(--tx)}
+.box{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:10px 12px;font-size:14px;margin:8px 0}.err{background:var(--warn);color:var(--warnx);border-color:transparent}.back{display:inline-block;padding:12px 0;color:var(--tx)}
+details{margin-top:16px}summary{cursor:pointer;min-height:44px;display:flex;align-items:center;font-weight:700}details p{font-size:13px;margin:6px 0}
+</style></head><body><div class="wrap">
+<header><a class="logo" href="#/">Newspaper</a><span><button class="btn" id="th">Tema</button> <button class="btn" id="av">Avisos</button></span></header>
+<div class="bar"><span class="sub" id="upd">Cargando…</span><button class="btn" id="ref" aria-label="Actualizar">↻</button></div><div id="st"></div>
+<main id="app"></main>
+<details id="help"><summary>Avisos en el móvil (ntfy)</summary><p>1. Instala la app gratuita <b>ntfy</b>. 2. Pulsa «+» y suscríbete al tema <code id="tp">secreto que configuraste en GitHub</code>. 3. Recibirás un aviso cuando una noticia la cubran 3 o más medios y el resumen de las 08:00.</p></details>
+<details><summary>Cómo se calcula el sesgo y la relevancia</summary><p><b>Sesgo:</b> cada medio tiene una etiqueta fija de orientación editorial (archivo outlets.json, clasificación orientativa propia, revisable). La barra muestra el reparto de <i>medios distintos</i> que cubren la noticia, no la orientación de cada artículo. Un medio cuenta una vez aunque publique varias versiones.</p><p><b>No mide verdad ni calidad.</b> Que muchos medios publiquen algo no lo hace cierto. Medios sin clasificar y de deportes no entran en los porcentajes. Con menos de 2 medios clasificados se indica «Datos insuficientes».</p><p><b>Resumen de las 08:00:</b> las 3 noticias aparecidas entre las 22:00 y las 08:00 (hora de Madrid) con más medios independientes. Criterio simple, no una medida objetiva de importancia; no sabe qué has leído ya.</p><p><b>Tema:</b> claro de 07:00 a 20:00 y oscuro de 20:00 a 07:00 (hora de Madrid), o el que elijas con el botón.</p></details>
+</div>
+<script type="module">
+import {pct,section} from "./lib.mjs";
+const LAB={L:"Izquierda",CL:"Centro-izquierda",C:"Centro",CR:"Centro-derecha",R:"Derecha",N:"Deportes (no aplica)","?":"Sin clasificar"};
+const CAT={es:"España",ali:"Alicante",int:"Internacional",geo:"Geopolítica",eu:"Europa",us:"EEUU",eco:"Economía",fut:"Fútbol",ten:"Tenis",tec:"Tecnología",cie:"Ciencia",cul:"Cultura"};
+const TABS=[["all","Todo"],["es","España"],["ali","Alicante"],["int","Internacional"],["geo","Geopolítica"],["eu","Europa"],["us","EEUU"],["eco","Economía"],["fut","Fútbol"],["ten","Tenis"],["tec","Tecnología"],["cie","Ciencia"],["cul","Cultura"],["saved","Guardadas"]];
+const $=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const store={get(k,d){try{const v=JSON.parse(localStorage.getItem(k));return v??d}catch{return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}}};
+const hm=t=>new Date(t).toLocaleTimeString("es-ES",{timeZone:"Europe/Madrid",hour:"2-digit",minute:"2-digit"});
+const ago=t=>{const m=Math.max(1,Math.round((Date.now()-t)/6e4));return m<60?`hace ${m} min`:m<1440?`hace ${Math.round(m/60)} h`:`hace ${Math.round(m/1440)} d`};
+let D=null,tab="all",q="",per=48,shown=40,saved=store.get("saved",[]),read=store.get("read",[]);
+const bar=(p,h)=>`<div class="sb" style="height:${h}px" role="img" aria-label="Izquierda ${p.L}%, centro ${p.C}%, derecha ${p.R}%"><i style="width:${p.L}%;background:var(--L)"></i><i style="width:${p.C}%;background:var(--C)"></i><i style="width:${p.R}%;background:var(--R)"></i></div>`;
+const inTab=c=>tab==="all"||(tab==="saved"?saved.includes(c.id):tab==="int"?["int","geo","eu","us"].some(k=>c.cats.includes(k)):c.cats.includes(tab));
+function drawList(){const now=Date.now(),qq=q.toLowerCase();let last="",h="";
+ const L=D.clusters.filter(c=>inTab(c)&&now-c.t<=per*36e5&&(!qq||(c.title+" "+c.src.map(s=>s.n+" "+s.h).join(" ")).toLowerCase().includes(qq)));
+ L.slice(0,shown).forEach(c=>{const s=section(c.t,now);if(s!==last){h+=`<h2 class="sec">${s}</h2>`;last=s}const p=pct(c.src);
+  h+=`<a class="row${read.includes(c.id)?" read":""}" href="#/n/${c.id}"><span class="tm">${hm(c.t)}</span><span class="hd">${esc(c.title)}</span><span class="mb">${p&&p.n>=2?bar(p,6):""}<small>${c.src.length} med.</small></span></a>`});
+ if(L.length>shown)h+=`<button class="btn" id="more">Cargar más (${L.length-shown})</button>`;
+ $("#list").innerHTML=h||`<p class="sub">No hay noticias para este filtro y periodo.</p>`}
+function drawHome(){const S=D.summary;
+ $("#app").innerHTML=`<input id="q" type="search" placeholder="Buscar noticias o medios" aria-label="Buscar" value="${esc(q)}"><label class="sub">Periodo <select id="per">${[[1,"1 h"],[6,"6 h"],[24,"24 h"],[48,"48 h"]].map(p=>`<option value="${p[0]}"${p[0]===per?" selected":""}>${p[1]}</option>`).join("")}</select></label>`+
+ `<nav class="tabs" aria-label="Categorías">${TABS.map(t=>`<button class="btn${tab===t[0]?" on":""}" data-t="${t[0]}">${t[1]}</button>`).join("")}</nav>`+
+ (S&&S.items.length?`<div class="box"><b>Resumen de las 08:00 (${esc(S.day)})</b><ol>${S.items.map(i=>`<li><a href="#/n/${i.id}">${esc(i.title)}</a> <span class="sub">· ${i.n} medios</span></li>`).join("")}</ol></div>`:"")+`<div id="list"></div>`;
+ drawList()}
+function detail(id){const c=D.clusters.find(x=>x.id===id);
+ if(!c){$("#app").innerHTML=`<a class="back" href="#/">← Volver</a><p class="box err">Esta noticia ya no está disponible: solo se conservan las últimas 48 horas.</p>`;return}
+ if(!read.includes(id)){read.push(id);store.set("read",read.slice(-500))}
+ const p=pct(c.src),G=[["Izquierda",["L","CL"]],["Centro",["C"]],["Derecha",["CR","R"]],["Sin clasificar",["?"]],["Deportes (no aplica)",["N"]]];
+ let h=`<a class="back" href="#/">← Volver</a><p class="meta">${c.cats.map(k=>CAT[k]).join(" · ")}</p><h1>${esc(c.title)}</h1><p class="meta">Primera publicación ${hm(c.t0)} · última ${hm(c.t)} (${ago(c.t)}) · ${c.src.length} medios</p><p><button class="btn" id="sv">${saved.includes(id)?"Guardada ✓":"Guardar"}</button> <button class="btn" id="sh">Compartir</button></p><h2 class="sec">Reparto por orientación del medio</h2>`;
+ h+=p&&p.n>=2?bar(p,14)+`<div class="leg"><span>Izquierda ${p.L}%</span><span>Centro ${p.C}%</span><span>Derecha ${p.R}%</span></div><p class="sub">${p.n<3?"Muestra pequeña: ":""}${p.n} medios clasificados${p.u?` · ${p.u} sin clasificar`:""}. Cada medio cuenta una vez.</p>`:`<p class="sub">Datos insuficientes para calcular el sesgo.</p>`;
+ G.forEach(([name,ks])=>{const S=c.src.filter(s=>ks.includes(s.b));if(!S.length)return;
+  h+=`<h3>${name} · ${S.length}</h3><ul class="s">`+S.map(s=>`<li><b>${esc(s.n)}</b> <span class="sub">${LAB[s.b]} · ${hm(s.t)}</span><br><a href="${esc(s.u)}" target="_blank" rel="noopener noreferrer">${esc(s.h)}</a>${s.d?"":' <span class="sub">(enlace vía Google News)</span>'}</li>`).join("")+"</ul>"});
+ $("#app").innerHTML=h+`<p class="sub">Esta ficha muestra solo titulares y metadatos de cada medio, sin resumen automático. Para el contenido completo abre el artículo original.</p>`}
+function route(){if(!D)return;const m=location.hash.match(/^#\/n\/([a-f0-9]{12})$/);scrollTo(0,0);m?detail(m[1]):drawHome()}
+function status(){const old=Date.now()-D.updated>45*6e4;$("#upd").textContent="Actualizado "+ago(D.updated);$("#tp").textContent=D.topic||"secreto que configuraste en GitHub";
+ $("#st").innerHTML=(old?`<div class="box err">Los datos tienen más de 45 minutos: puede haber noticias más recientes.</div>`:"")+(D.errors.length?`<div class="box err">${D.errors.length} fuentes no respondieron: ${D.errors.map(e=>esc(e.n)).join(", ")}. Las demás siguen funcionando.</div>`:"")}
+function load(){fetch("news.json?"+Date.now(),{cache:"no-store"}).then(r=>r.json()).then(d=>{const first=!D;D=d;status();if(first)route();else if(!location.hash.startsWith("#/n/")&&$("#list"))drawList()}).catch(()=>{$("#upd").textContent="Sin conexión: se muestran datos guardados si los hay"})}
+document.addEventListener("click",e=>{const t=e.target.closest("[data-t]");
+ if(t){tab=t.dataset.t;shown=40;drawHome()}
+ if(e.target.id==="more"){shown+=40;drawList()}
+ if(e.target.id==="ref")load();
+ if(e.target.id==="av"){const d=$("#help");d.open=true;d.scrollIntoView()}
+ if(e.target.id==="th"){const o=["auto","light","dark"];let c="auto";try{c=localStorage.getItem("th")||"auto"}catch{}try{localStorage.setItem("th",o[(o.indexOf(c)+1)%3])}catch{}applyTheme()}
+ if(e.target.id==="sv"){const id=location.hash.slice(4);saved=saved.includes(id)?saved.filter(x=>x!==id):[...saved,id];store.set("saved",saved);e.target.textContent=saved.includes(id)?"Guardada ✓":"Guardar"}
+ if(e.target.id==="sh"){const u=location.href;navigator.share?navigator.share({title:document.querySelector("h1").textContent,url:u}).catch(()=>{}):navigator.clipboard?.writeText(u).then(()=>{e.target.textContent="Enlace copiado"})}});
+document.addEventListener("input",e=>{if(e.target.id==="q"){q=e.target.value;shown=40;drawList()}});
+document.addEventListener("change",e=>{if(e.target.id==="per"){per=+e.target.value;shown=40;drawList()}});
+addEventListener("hashchange",route);document.addEventListener("visibilitychange",()=>{if(!document.hidden)load()});setInterval(load,6e4);
+if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
+applyTheme();load();
+</script></body></html>
